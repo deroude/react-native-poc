@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Theme } from '../theme';
 import { themeCollectionLoad } from '../../actions';
-import { Text, View } from 'react-native';
+import { Text, ListView } from 'react-native';
 
 class ThemeList extends Component {
 
@@ -13,8 +13,11 @@ class ThemeList extends Component {
 
     render() {
         if (this.props.themes && this.props.themes.length > 0) {
-            const themes = this.props.themes.map(t => <Theme key={t.id} theme={t}></Theme>);
-            return <View>{themes}</View>;
+            var ds=new ListView.DataSource({rowHasChanged:(t1,t2)=>false});
+            return <ListView style={{flex:1,marginTop:50}}
+                dataSource={ds.cloneWithRows(this.props.themes)}
+                renderRow={(t) => <Theme key={t.id} theme={t} />}
+            />;
         }
         if (this.props.loading) {
             return <Text>Loading...</Text>;
